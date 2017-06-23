@@ -23,6 +23,8 @@
         </activity>
         <activity android:name=".video.MediaPlayerSeekTestActivity">
         </activity>
+        <activity android:name=".video.ExoPlayerSeekTestActivity">
+        </activity>
     </application>
 
 </manifest>
