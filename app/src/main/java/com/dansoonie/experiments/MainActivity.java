@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.dansoonie.experiments.adapter.ItemAdapter;
 import com.dansoonie.experiments.model.Item;
-import com.dansoonie.experiments.video.ExoPlayerSeekTestActivity;
-import com.dansoonie.experiments.video.MediaPlayerSeekTestActivity;
+import com.dansoonie.experiments.category.video.seeking.ExoPlayerSeekTestActivity;
+import com.dansoonie.experiments.category.video.seeking.MediaPlayerSeekTestActivity;
 import com.dansoonie.experiments.videosamples.DownloadActivity;
 
 import java.util.LinkedList;

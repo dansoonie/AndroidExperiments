@@ -21,9 +21,9 @@
         </activity>
         <activity android:name=".videosamples.DownloadActivity">
         </activity>
-        <activity android:name=".video.MediaPlayerSeekTestActivity">
+        <activity android:name=".category.video.seeking.MediaPlayerSeekTestActivity">
         </activity>
-        <activity android:name=".video.ExoPlayerSeekTestActivity">
+        <activity android:name=".category.video.seeking.ExoPlayerSeekTestActivity">
         </activity>
     </application>
 

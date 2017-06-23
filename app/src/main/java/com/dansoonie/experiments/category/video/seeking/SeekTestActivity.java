@@ -1,4 +1,4 @@
-package com.dansoonie.experiments.video;
+package com.dansoonie.experiments.category.video.seeking;
 
 import android.app.Activity;
 import android.graphics.SurfaceTexture;

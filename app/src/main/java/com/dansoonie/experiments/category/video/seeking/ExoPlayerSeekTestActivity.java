@@ -1,4 +1,4 @@
-package com.dansoonie.experiments.video;
+package com.dansoonie.experiments.category.video.seeking;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +39,7 @@ public class ExoPlayerSeekTestActivity extends SeekTestActivity {
     exoPlayer.setVideoSurface(new Surface(surfaceTexture));
     exoPlayer.prepare(buildMediaSource(Uri.parse(Videos.getPath(this, 2))), true, false);
 
+    btnLoad.setEnabled(false);
     btnPlayPause.setEnabled(true);
     btnSeek.setEnabled(true);
     exoPlayer.addListener(new ExoPlayer.EventListener() {
