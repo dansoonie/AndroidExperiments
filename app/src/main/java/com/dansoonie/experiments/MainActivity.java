@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.dansoonie.experiments.adapter.ItemAdapter;
 import com.dansoonie.experiments.model.Item;
+import com.dansoonie.experiments.video.MediaPlayerSeekTestActivity;
+import com.dansoonie.experiments.videosamples.DownloadActivity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
   private static List<Item> createItems() {
     List<Item> items = new LinkedList<>();
+    items.add(new Item("MediaPlayer Seek Test", MediaPlayerSeekTestActivity.class));
+    items.add(new Item("Download Video Samples", DownloadActivity.class));
+
     return items;
   }
 }
