@@ -27,6 +27,8 @@
         </activity>
         <activity android:name=".category.video.exo.ExoPlayerBehaviorTestActivity">
         </activity>
+        <activity android:name=".category.video.exo.ExoPlayerHlsTestActivity">
+        </activity>
     </application>
 
 </manifest>
