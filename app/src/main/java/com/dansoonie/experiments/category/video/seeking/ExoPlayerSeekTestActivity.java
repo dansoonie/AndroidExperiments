@@ -72,6 +72,11 @@ public class ExoPlayerSeekTestActivity extends SeekTestActivity {
       }
 
       @Override
+      public void onRepeatModeChanged(int repeatMode) {
+
+      }
+
+      @Override
       public void onPlayerError(ExoPlaybackException error) {
 
       }

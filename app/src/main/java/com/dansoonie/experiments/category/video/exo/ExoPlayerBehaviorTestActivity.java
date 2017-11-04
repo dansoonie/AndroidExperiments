@@ -137,6 +137,11 @@ public class ExoPlayerBehaviorTestActivity extends Activity implements TextureVi
       }
 
       @Override
+      public void onRepeatModeChanged(int repeatMode) {
+
+      }
+
+      @Override
       public void onPlayerError(ExoPlaybackException error) {
         Log.d(TAG, "PlayerError");
       }

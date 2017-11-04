@@ -11,9 +11,9 @@ import android.widget.FrameLayout;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -34,12 +34,12 @@ import com.google.android.exoplayer2.util.Util;
  * Created by dansoonie on 17/8/7/.
  */
 
-public class ExoHlsPlayer extends FrameLayout implements ExoPlayer.EventListener{
+public class ExoHlsPlayer extends FrameLayout implements Player.EventListener{
   private static final String TAG = "ExoHlsPlayer";
 
   private Context mContext;
   private String mUserAgent;
-  private SimpleExoPlayerView mPlayerView;
+  private CustomSimpleExoPlayerView mPlayerView;
   private SimpleExoPlayer mPlayer;
   private DataSource.Factory mMediaDataSourceFactory;
   private MediaSource mMediaSource;
@@ -49,13 +49,33 @@ public class ExoHlsPlayer extends FrameLayout implements ExoPlayer.EventListener
   private long mResumePosition;
   private boolean mResumeOnResume = false;
   private OnPlayerInitializedListener mOnPlayerInitializedListener;
+  private OnCompleteListener mOnCompleteListener;
+  private OnBufferingListener mOnBufferingListener;
+  private int mState;
 
   public interface OnPlayerInitializedListener {
     void onInitialized(ExoHlsPlayer player);
   }
 
+  public interface OnCompleteListener {
+    void onComplete(ExoHlsPlayer player);
+  }
+
+  public interface OnBufferingListener {
+    void onBufferingStart(ExoHlsPlayer player);
+    void onBufferingEnd(ExoHlsPlayer player);
+  }
+
   public void setOnPlayerInitializedListener(OnPlayerInitializedListener listener) {
     mOnPlayerInitializedListener = listener;
+  }
+
+  public void setOnCompleteListener(OnCompleteListener listener) {
+    mOnCompleteListener = listener;
+  }
+
+  public void setOnBufferingListener(OnBufferingListener listener) {
+    mOnBufferingListener = listener;
   }
 
   public ExoHlsPlayer(@NonNull Context context) {
@@ -78,9 +98,8 @@ public class ExoHlsPlayer extends FrameLayout implements ExoPlayer.EventListener
     mShouldAutoPlay = true;
     mUserAgent = Util.getUserAgent(mContext, "ExoPlayerDemo");
     mMediaDataSourceFactory = buildDataSourceFactory(null);
-    mPlayerView = new SimpleExoPlayerView(context);
+    mPlayerView = new CustomSimpleExoPlayerView(context);
     addView(mPlayerView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
   }
 
   public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
@@ -102,10 +121,15 @@ public class ExoHlsPlayer extends FrameLayout implements ExoPlayer.EventListener
 
       mPlayerView.setPlayer(mPlayer);
       mPlayer.setPlayWhenReady(mShouldAutoPlay);
+      mPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
     }
     if (mOnPlayerInitializedListener != null) {
       mOnPlayerInitializedListener.onInitialized(this);
     }
+  }
+
+  public void setResizeMode(int resizeMode) {
+    mPlayerView.setResizeMode(resizeMode);
   }
 
   public void load(String path) {
@@ -176,12 +200,45 @@ public class ExoHlsPlayer extends FrameLayout implements ExoPlayer.EventListener
 
   @Override
   public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+    if (mState == Player.STATE_BUFFERING && playbackState != Player.STATE_BUFFERING) {
+      Log.d(TAG, "Buffering end state");
+      if (mOnBufferingListener != null) {
+        mOnBufferingListener.onBufferingEnd(this);
+      }
+    }
+    switch (playbackState) {
+      case Player.STATE_ENDED:
+        Log.d(TAG, "Ended state");
+        if (mOnCompleteListener != null) {
+          mOnCompleteListener.onComplete(this);
+        }
+        break;
+      case Player.STATE_BUFFERING:
+        Log.d(TAG, "Buffering start state");
+        if (mOnBufferingListener != null) {
+          mOnBufferingListener.onBufferingStart(this);
+        }
+        break;
+      case Player.STATE_IDLE:
+        Log.d(TAG, "Idle state");
+        break;
+      case Player.STATE_READY:
+        Log.d(TAG, "Ready state");
+        break;
+    }
+    mState = playbackState;
+  }
+
+  @Override
+  public void onRepeatModeChanged(int repeatMode) {
 
   }
 
   @Override
   public void onPlayerError(ExoPlaybackException error) {
-
+    Log.d(TAG, "On Error");
+    Log.d(TAG, error.toString());
+    mPlayer.prepare(mMediaSource);
   }
 
   @Override
