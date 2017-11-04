@@ -29,6 +29,10 @@
         </activity>
         <activity android:name=".category.video.exo.ExoPlayerHlsTestActivity">
         </activity>
+        <activity android:name=".category.video.exo.mediasource.ExoPlayerTestMediaSourceActivity">
+        </activity>
+        <activity android:name=".category.video.exo.mediasource.MediaSourceListActivity">
+        </activity>
     </application>
 
 </manifest>

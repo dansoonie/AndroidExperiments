@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.dansoonie.experiments.adapter.ItemAdapter;
 import com.dansoonie.experiments.category.video.exo.ExoPlayerBehaviorTestActivity;
 import com.dansoonie.experiments.category.video.exo.ExoPlayerHlsTestActivity;
+import com.dansoonie.experiments.category.video.exo.mediasource.MediaSourceListActivity;
 import com.dansoonie.experiments.model.Item;
 import com.dansoonie.experiments.category.video.seeking.ExoPlayerSeekTestActivity;
 import com.dansoonie.experiments.category.video.seeking.MediaPlayerSeekTestActivity;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     items.add(new Item("ExoPlayer Behavior Test", ExoPlayerBehaviorTestActivity.class));
     items.add(new Item("ExoPlayer HLS Test", ExoPlayerHlsTestActivity.class));
     items.add(new Item("Download Video Samples", DownloadActivity.class));
+    items.add(new Item("ExoPlayer MediaSources Test", MediaSourceListActivity.class));
 
     return items;
   }
